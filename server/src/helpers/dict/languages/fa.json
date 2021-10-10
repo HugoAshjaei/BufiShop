@@ -1,0 +1,6 @@
+{
+    "errors": {
+        "authenticationFailed": "خطای احراز هویت! لطفا دوباره وارد شوید.",
+        "notFound": "پیدا نشد!"
+    }
+}
