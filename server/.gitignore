@@ -8,7 +8,6 @@ lerna-debug.log*
 package-lock.json
 jwtRS256.key
 jwtRS256.key.pub
-uploads/
 logs/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)

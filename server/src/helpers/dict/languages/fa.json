@@ -1,6 +1,9 @@
 {
     "errors": {
         "authenticationFailed": "خطای احراز هویت! لطفا دوباره وارد شوید.",
-        "notFound": "پیدا نشد!"
+        "notFound": "پیدا نشد!",
+        "emailValidationFailed": "ایمیل شما معتبر نیست.",
+        "phoneValidationFailed": "شماره تلفن وارد شده معتبر نیست.",
+        "nameValidationFailed": "نام یا نام خانوادگی معتبر نیست."
     }
 }
