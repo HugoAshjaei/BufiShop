@@ -1,6 +1,7 @@
 import { IImages } from ".";
 
 export interface IAdmin {
+    _id: string;
     firstName: string;
     lastName: string;
     email?: string;

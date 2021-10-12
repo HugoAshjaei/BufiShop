@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 import { IConfig } from '../intefaces';
 import localDict from '../helpers/dict';
-import { currencyCodeEnum } from 'src/helpers/enums';
+import { currencyCodeEnum, storeTypes } from '../helpers/enums';
 
 const configSchema = new Schema<IConfig>(
     {
@@ -74,6 +74,12 @@ const configSchema = new Schema<IConfig>(
             type: String,
             default: 'ریال',
             enum: currencyCodeEnum
+        },
+        type: {
+            type: String,
+            required: true,
+            enum: storeTypes,
+            default: 'product'
         },
         logo: {
             original: {

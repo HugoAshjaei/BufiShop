@@ -3,7 +3,7 @@ import validator from 'validator';
 import { IAdmin } from '../intefaces';
 import argon2 from 'argon2';
 import localDict from '../helpers/dict';
-import { adminRoleEnum } from 'src/helpers/enums';
+import { adminRoleEnum } from '../helpers/enums';
 import {randomBytes} from 'crypto';
 import jwt from 'jsonwebtoken';
 import config from '../config';

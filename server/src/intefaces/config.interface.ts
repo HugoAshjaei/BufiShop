@@ -12,6 +12,7 @@ export interface IConfig {
     currencyCode: 'ریال' | 'تومان',
     logo?: IImages;
     favicon?: String;
+    type: 'product' | 'service' | 'file';
 }
 
 export interface IConfigAddress {
