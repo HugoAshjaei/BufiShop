@@ -11,8 +11,19 @@ export interface IConfig {
     terms?: string;
     currencyCode: 'ریال' | 'تومان',
     logo?: IImages;
-    favicon?: String;
+    favicon?: string;
     type: 'product' | 'service' | 'file';
+    isEmailVerificationRequired: boolean;
+    smtp: {
+        host: string;
+        port: number;
+        secure: boolean;
+        auth: {
+            user: string;
+            pass: string;
+        }
+    };
+    isSmsVerificationRequired: boolean;
 }
 
 export interface IConfigAddress {

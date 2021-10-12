@@ -106,6 +106,39 @@ const configSchema = new Schema<IConfig>(
         favicon: {
             type: String,
             default: 'uploads/default/favicon.png'
+        },
+        isEmailVerificationRequired: {
+            type: Boolean,
+            default: false
+        },
+        isSmsVerificationRequired: {
+            type: Boolean,
+            default: false
+        },
+        smtp: {
+            host: {
+                type: String,
+                trim: true
+            },
+            port: {
+                type: Number,
+                trim: true
+            },
+            secure: {
+                type: Boolean,
+                trim: true,
+                default: false
+            },
+            auth: {
+                user: {
+                    type: String,
+                    trim: true
+                },
+                pass: {
+                    type: String,
+                    trim: true
+                }
+            }
         }
     },
     {
