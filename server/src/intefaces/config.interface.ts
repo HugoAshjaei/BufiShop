@@ -14,7 +14,7 @@ export interface IConfig {
     favicon?: string;
     type: 'product' | 'service' | 'file';
     isEmailVerificationRequired: boolean;
-    smtp: {
+    smtp?: {
         host: string;
         port: number;
         secure: boolean;
@@ -23,7 +23,7 @@ export interface IConfig {
             pass: string;
         }
     };
-    isSmsVerificationRequired: boolean;
+    isSmsVerificationRequired?: boolean;
 }
 
 export interface IConfigAddress {

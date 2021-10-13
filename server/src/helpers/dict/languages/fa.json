@@ -2,8 +2,14 @@
     "errors": {
         "authenticationFailed": "خطای احراز هویت! لطفا دوباره وارد شوید.",
         "notFound": "پیدا نشد!",
+        "notFirstTime": "این متد تنها در کانفیگ اولیه قابل دسترسی است.",
         "emailValidationFailed": "ایمیل شما معتبر نیست.",
         "phoneValidationFailed": "شماره تلفن وارد شده معتبر نیست.",
-        "nameValidationFailed": "نام یا نام خانوادگی معتبر نیست."
+        "nameValidationFailed": "نام یا نام خانوادگی معتبر نیست.",
+        "configNotFound": "ابتدا باید کانفیگ فروشگاه را انجام دهید."
+    },
+    "success": {
+        "firstConfig": "کانفیگ های اولیه با موفقیت انجام شد.",
+        "superAdminAdded": "ادمین اصلی اضافه شد."
     }
 }

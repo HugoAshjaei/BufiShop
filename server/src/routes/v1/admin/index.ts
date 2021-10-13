@@ -4,7 +4,7 @@ import {errors} from 'celebrate';
 
 export default () => {
     const app = Router();
-    app.use('v1', require('./v1'));
+    app.use('config', require('./config'));
     // Adding celebrate error handling
     app.use(errors());
 
