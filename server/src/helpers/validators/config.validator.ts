@@ -1,11 +1,12 @@
 import Joi from "joi";
 import { Request, Response, NextFunction } from 'express';
+import localDict from '../../helpers/dict';
 
 const configSchema = Joi.object().keys({
     name: Joi.string().alphanum().required(),
     description: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().optional().regex(/^(\+98?)?{?(0?[0-9]{10,10}}?)$/gm),
+    phone: Joi.string().optional().regex(/[0-9]/),
     address: Joi.object().keys({
         province: Joi.string().required(),
         city: Joi.string().required(),
@@ -36,7 +37,7 @@ const configSchema = Joi.object().keys({
 export default function validateConfig(req: Request, res: Response, next: NextFunction) {
     const { error } = configSchema.validate(req.body);
     if (error) {
-        throw new Error(JSON.stringify(error));
+        throw new Error(localDict.fa.errors.requiredDataCorrectly);
     }
     next();
 }

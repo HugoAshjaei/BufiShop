@@ -5,6 +5,7 @@ import routes from '../routes';
 import cookieParser from 'cookie-parser';
 import config from '../config';
 import localDict from '../helpers/dict';
+import { log } from 'console';
 
 export default ({ app }: { app: express.Application }) => {
     /**

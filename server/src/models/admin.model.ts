@@ -50,7 +50,7 @@ const adminSchema = new Schema<IAdmin>(
             type: String,
             trim: true,
             validate(value: string) {
-                if (!validator.matches(value, /^(\+98?)?{?(0?[0-9]{10,10}}?)$/gm)) {
+                if (!validator.matches(value, /^(\+98|0)?9\d{9}$/)) {
                     throw new Error(localDict.fa.errors.phoneValidationFailed);
                 }
             }

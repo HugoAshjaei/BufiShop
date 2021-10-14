@@ -31,7 +31,7 @@ const configSchema = new Schema<IConfig>(
             type: String,
             trim: true,
             validate(value: string) {
-                if (!validator.matches(value, /^(\+98?)?{?(0?[0-9]{10,10}}?)$/gm)) {
+                if (!validator.matches(value, /[0-9]/)) {
                     throw new Error(localDict.fa.errors.phoneValidationFailed);
                 }
             }

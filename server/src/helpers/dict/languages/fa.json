@@ -6,7 +6,8 @@
         "emailValidationFailed": "ایمیل شما معتبر نیست.",
         "phoneValidationFailed": "شماره تلفن وارد شده معتبر نیست.",
         "nameValidationFailed": "نام یا نام خانوادگی معتبر نیست.",
-        "configNotFound": "ابتدا باید کانفیگ فروشگاه را انجام دهید."
+        "configNotFound": "ابتدا باید کانفیگ فروشگاه را انجام دهید.",
+        "requiredDataCorrectly": "لطفا موارد خواسته شده را به درستی وارد کنید."
     },
     "success": {
         "firstConfig": "کانفیگ های اولیه با موفقیت انجام شد.",
