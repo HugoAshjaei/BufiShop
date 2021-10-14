@@ -7,7 +7,10 @@
         "phoneValidationFailed": "شماره تلفن وارد شده معتبر نیست.",
         "nameValidationFailed": "نام یا نام خانوادگی معتبر نیست.",
         "configNotFound": "ابتدا باید کانفیگ فروشگاه را انجام دهید.",
-        "requiredDataCorrectly": "لطفا موارد خواسته شده را به درستی وارد کنید."
+        "requiredDataCorrectly": "لطفا موارد خواسته شده را به درستی وارد کنید.",
+        "internalServerError": "خطای سرور. لطفا بعدا امتحان کنید.",
+        "emailOrPhoneExist": "این شماره تلفن یا ایمیل قبلا ثبت شده است.",
+        "invalidCredentials": "اطلاعات ورود شما با اطلاعات ثبت شده در وبسایت مطابقت نداشت. لطفا دوباره تلاش کنید."
     },
     "success": {
         "firstConfig": "کانفیگ های اولیه با موفقیت انجام شد.",

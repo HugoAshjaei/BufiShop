@@ -4,11 +4,21 @@ import { IAdmin } from '../intefaces';
 import argon2 from 'argon2';
 import localDict from '../helpers/dict';
 import { adminRoleEnum } from '../helpers/enums';
-import {randomBytes} from 'crypto';
+import { randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 
-const adminSchema = new Schema<IAdmin>(
+interface IAdminDocument extends IAdmin, Document {
+    isPasswordMatch: (password: string) => boolean;
+    generateAuthToken: () => string;
+}
+
+interface IAdminModel extends mongoose.Model<IAdminDocument> {
+    isEmailOrPhoneTaken: (email: string, phone: string, excludeUserId?: string) => boolean;
+}
+
+
+const adminSchema = new Schema<IAdminDocument>(
     {
         firstName: {
             type: String,
@@ -126,9 +136,9 @@ const adminSchema = new Schema<IAdmin>(
 adminSchema.statics.isEmailOrPhoneTaken = async function (email, phone, excludeUserId) {
     let admin;
     if (excludeUserId) {
-        admin = await this.findOne({ $or: [{email}, {phone}], _id: { $ne: excludeUserId } });
+        admin = await this.findOne({ $or: [{ email }, { phone }], _id: { $ne: excludeUserId } });
     } else {
-        admin = await this.findOne({ $or: [{email}, {phone}] });
+        admin = await this.findOne({ $or: [{ email }, { phone }] });
     }
     return !!admin;
 };
@@ -138,14 +148,14 @@ adminSchema.pre('save', async function (next) {
     const user = this;
     if (user.isModified('password')) {
         const salt = randomBytes(32);
-        user.password = await argon2.hash(user.password, {salt});
+        user.password = await argon2.hash(user.password, { salt });
         user.salt = salt.toString('hex');
     }
     next();
 });
 
 // generate auth token
-adminSchema.methods.generateAuthToken = function() { 
+adminSchema.methods.generateAuthToken = function () {
     const user = this;
     const token = jwt.sign({
         _id: user._id,
@@ -155,13 +165,26 @@ adminSchema.methods.generateAuthToken = function() {
     }, config.jwtSecret, {
         algorithm: 'RS256'
     });
-    
+
     return token;
-  }
+}
+
+
+/**
+* Check if password matches the user's password
+* @param {string} password
+* @returns {Promise<boolean>}
+*/
+adminSchema.methods.isPasswordMatch = async function (password) {
+    const user = this;
+    return await argon2.verify(user.password, password);
+};
+
 
 /**
  * @typedef Admin
  */
-const Admin = mongoose.model<IAdmin>('Admin', adminSchema);
+
+const Admin = mongoose.model<IAdminDocument, IAdminModel>('Admin', adminSchema);
 
 export default Admin;

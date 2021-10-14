@@ -3,10 +3,12 @@ import { Request, Response, NextFunction } from 'express';
 import { Config, Admin } from '../../../models';
 import { loadConfig } from '../../../loaders/config.loader';
 import localDict from '../../../helpers/dict';
+import * as services from '../../../services';
 
-const gettingStarted = async (req: Request, res: Response) => {
+const gettingStarted = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const config = await new Config(req.body).save();
+        const config = await services.config.create(req.body);
+
         res.status(200).json({
             success: true,
             data: {
@@ -14,22 +16,21 @@ const gettingStarted = async (req: Request, res: Response) => {
             },
             message: localDict.fa.success.firstConfig
         });
-    } catch (e) {
-        res.status(500).json({
-            error: e.message
-        });
+    } catch (err) {
+        next(err)
     }
 }
 
 
-const createSuperAdmin = async (req: Request, res: Response) => {
+const createSuperAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         req.body.role = 'super-admin';
         const config = await Config.findOne({}).sort({ createdAt: -1 });
         if (!config) {
             throw new Error(localDict.fa.errors.configNotFound);
         }   
-        const admin = await new Admin(req.body).save();
+        const admin = await services.admin.create(req.body);
+        
         await loadConfig();
         res.status(200).json({
             success: true,
@@ -39,10 +40,8 @@ const createSuperAdmin = async (req: Request, res: Response) => {
             },
             message: localDict.fa.success.superAdminAdded
         });
-    } catch (e) {
-        res.status(500).json({
-            error: e.message
-        });
+    } catch (err) {
+        next(err)
     }
 }
 

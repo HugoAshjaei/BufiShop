@@ -37,6 +37,7 @@ const configSchema = Joi.object().keys({
 export default function validateConfig(req: Request, res: Response, next: NextFunction) {
     const { error } = configSchema.validate(req.body);
     if (error) {
+        res.statusCode = 400;
         throw new Error(localDict.fa.errors.requiredDataCorrectly);
     }
     next();

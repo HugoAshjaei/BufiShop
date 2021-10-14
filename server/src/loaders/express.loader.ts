@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import config from '../config';
 import localDict from '../helpers/dict';
 import { log } from 'console';
+import sendResponse from '../utils/sendResponse';
+import logger from '../utils/logger';
 
 export default ({ app }: { app: express.Application }) => {
     /**
@@ -48,29 +50,27 @@ export default ({ app }: { app: express.Application }) => {
     // catch 404 and forward to error handler
     app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
         const err = new Error(localDict.fa.errors.notFound);
+        res.statusCode = 404;
         next(err);
     });
 
-    // UnAuthorized error
+    // error handling
     app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-        /**
-         * Handle 401 thrown by express-jwt library
-         */
-        if (err.name === 'UnauthorizedError') {
-            console.log(err);
-            return res.status(401).send({ errors: [{ message: localDict.fa.errors.authenticationFailed }] }).end();
+        // logs
+        if (res.statusCode == 200) {
+            res.statusCode = 500;
         }
-        return next(err);
-    });
-
-    // Other errors
-    app.use((err: Error, req: express.Request, res: express.Response) => {
-        console.log(err);
-        res.status(500);
-        res.json({
-            errors: {
-                message: err.message
-            }
-        });
+        if (res.statusCode == 500) {
+            logger.error(new Date() + ' - ' +err.message);
+        } else {
+            logger.info(new Date() + ' - ' +err.message);
+        }
+        sendResponse({
+            response: {
+                error: err.message || localDict.fa.errors.internalServerError
+            },
+            status: Number(res.statusCode) || 500,
+            res
+        })
     });
 };
