@@ -111,10 +111,6 @@ const configSchema = new Schema<IConfig>(
             type: Boolean,
             default: false
         },
-        isSmsVerificationRequired: {
-            type: Boolean,
-            default: false
-        },
         smtp: {
             host: {
                 type: String,

@@ -1,13 +1,15 @@
 import { Admin } from "../models";
 import localDict from "../helpers/dict";
+import _ from "lodash";
 
 export async function create(data: any) {
   if (await Admin.isEmailOrPhoneTaken(data.email, data.phone)) {
     throw new Error(localDict.fa.errors.emailOrPhoneExist);
   }
   const admin = await new Admin(data).save();
-  // send verification or welcome email
-  return admin;
+
+  // TODO send verification or welcome email
+  return _.pick(admin, ["_id", "firstName", "lastName", "email", "phone", "emailVerified", "phoneVerified", "isBlocked", "role", "image"]);
 }
 
 export async function login(username: string, password: string) {
@@ -17,11 +19,16 @@ export async function login(username: string, password: string) {
   if (!admin) {
     throw new Error(localDict.fa.errors.invalidCredentials);
   }
+  if (global.CONFIG.website.isEmailVerificationRequired) {
+    if (admin.email == username && admin.email && admin.emailVerified === false) {
+      throw new Error(localDict.fa.errors.emailNotVerified);
+    }
+  }
   if (await admin.isPasswordMatch(password)) {
     throw new Error(localDict.fa.errors.invalidCredentials);
   }
   const token = await admin.generateAuthToken();
-  return { admin, token };
+  return { admin: _.pick(admin, ["_id", "firstName", "lastName", "email", "phone", "emailVerified", "phoneVerified", "isBlocked", "role", "image"]), token };
 }
 
 export async function logout(token: string) {
@@ -35,7 +42,9 @@ export async function block(id: string) {
   }
   admin.isBlocked = true;
   await admin.save();
-  // add id to redis block list
+  // TODO add id to redis block list
+  // TODO  send email or sms
+
   return true;
 }
 
@@ -46,6 +55,7 @@ export async function unblock(id: string) {
   }
   admin.isBlocked = false;
   await admin.save();
-  // remove id from redis block list
+  // TODO remove id from redis block list
+  // TODO  send email or sms
   return true;
 }

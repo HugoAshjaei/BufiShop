@@ -1,3 +1,3 @@
-import { isFirstTime } from "./config.middleware";
+import { isFirstTime, isNotFirstTime } from "./config.middleware";
 
-export default isFirstTime;
+export default {isFirstTime, isNotFirstTime};

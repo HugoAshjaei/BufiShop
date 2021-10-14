@@ -23,7 +23,6 @@ export interface IConfig {
             pass: string;
         }
     };
-    isSmsVerificationRequired?: boolean;
 }
 
 export interface IConfigAddress {

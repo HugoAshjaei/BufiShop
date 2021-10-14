@@ -165,7 +165,6 @@ adminSchema.methods.generateAuthToken = function () {
     }, config.jwtSecret, {
         algorithm: 'RS256'
     });
-
     return token;
 }
 

@@ -9,3 +9,12 @@ export async function isFirstTime(req: Request, res: Response, next: NextFunctio
     throw new Error(localDict.fa.errors.notFirstTime);
   }
 }
+
+export async function isNotFirstTime(req: Request, res: Response, next: NextFunction) {
+  if (!global.CONFIG.firstTimeUsage) {
+    await next();
+  } else {
+    res.statusCode = 403;
+    throw new Error(localDict.fa.errors.configNotFound);
+  }
+}
