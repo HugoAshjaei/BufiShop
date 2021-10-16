@@ -15,9 +15,29 @@ if (envFound.error) {
     throw new Error('Could not find .env file!');
 }
 
+const imagesSize = {
+    thumbnail: {
+        width: 64,
+        height: 64,
+    },
+    small: {
+        width: 240,
+        height: 240,
+    },
+    medium: {
+        width: 480,
+        height: 480,
+    },
+    large: {
+        width: 960,
+        height: 960,
+    },
+};
+
 export default {
     port: parseInt(process.env.PORT || '8000', 10),
     databaseURL: process.env.MONGO_URI,
     origins: process.env.ORIGINS,
-    jwtSecret: RSA_PRIVATE_KEY
+    jwtSecret: RSA_PRIVATE_KEY,
+    imagesSize,
 };

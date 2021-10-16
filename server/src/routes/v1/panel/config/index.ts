@@ -4,7 +4,7 @@ import config from '../../../../controllers/v1';
 import gettingStarted from '../../../../middlewares/gettingStarted';
 import { validateConfig, validateAdmin } from '../../../../helpers/validators';
 import authMiddleware from '../../../../middlewares/auth';
-
+import upload from '../../../../middlewares/multer';
 
 export default () => {
     const app = Router();
@@ -38,6 +38,14 @@ export default () => {
         validateConfig,
         config.get
     );
+
+    app.put('/logo',
+    gettingStarted.isNotFirstTime,
+    authMiddleware.verify,
+    authMiddleware.isSuperAdmin,
+    upload.single('image'),
+    config.update
+);
 
 
     // Adding celebrate error handling

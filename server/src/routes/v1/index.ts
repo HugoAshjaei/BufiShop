@@ -1,10 +1,10 @@
 import {Router} from 'express';
 import {errors} from 'celebrate';
-import admin from './admin';
+import panel from './panel';
 
 export default () => {
     const app = Router();
-    app.use('/admin', admin());
+    app.use('/panel', panel());
     // Adding celebrate error handling
     app.use(errors());
 
