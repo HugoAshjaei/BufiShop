@@ -1,3 +1,4 @@
 import config from "./config"
+import admin from "./admin";
 
-export default config;
+export { config, admin };

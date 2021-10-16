@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import { errors } from 'celebrate';
-import config from '../../../../controllers/v1';
-import { validateConfig, validateAdmin } from '../../../../helpers/validators';
-import authMiddleware from '../../../../middlewares/auth';
+import { admin } from '../../../../controllers/v1';
+import { validateAdmin } from '../../../../helpers/validators';
 
 
 export default () => {
@@ -10,30 +9,21 @@ export default () => {
 
     // admins list
     app.get('/',
-        config.gettingStarted
+        admin.list
     );
 
-    app.post('/getting-started/create-super-admin',
+    app.post('/add',
         validateAdmin,
-        config.createSuperAdmin
+        admin.create
     );
 
-    // update config
-    app.put('/',
-        authMiddleware.verify,
-        authMiddleware.isSuperAdmin,
-        validateConfig,
-        config.update
+    app.get('/:id',
+        admin.getById
     );
 
-    // get config
-    app.get('/',
-        authMiddleware.verify,
-        authMiddleware.isAdmin,
-        validateConfig,
-        config.get
+    app.put('/:id',
+        admin.updateById
     );
-
 
     // Adding celebrate error handling
     app.use(errors());

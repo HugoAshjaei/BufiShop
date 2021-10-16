@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { errors } from 'celebrate';
-import config from '../../../../controllers/v1';
+import { config } from '../../../../controllers/v1';
 import gettingStarted from '../../../../middlewares/gettingStarted';
 import { validateConfig, validateAdmin } from '../../../../helpers/validators';
 import authMiddleware from '../../../../middlewares/auth';

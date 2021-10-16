@@ -26,14 +26,14 @@ const sendResponse = (props: ISendResponseProps) => {
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true
-            }).status(status).json(response.result);
+            }).status(status).json(response);
         } else {
             // Send success response
-            res.status(status).json(response.result);
+            res.status(status).json({ result: response.result, pagination: response.pagination || undefined });
         }
-    } else if (response?.error) {
+    } else if (response?.errors) {
         // Send error response
-        res.status(status).json({ errors: { message: response.error } });
+        res.status(status).json({ errors: { message: response.errors } });
     } else {
         // Send unknown error response
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json(response);

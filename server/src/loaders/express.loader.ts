@@ -67,7 +67,7 @@ export default ({ app }: { app: express.Application }) => {
         }
         sendResponse({
             response: {
-                error: err.message || localDict.fa.errors.internalServerError
+                errors: err.message || localDict.fa.errors.internalServerError
             },
             status: Number(res.statusCode) || 500,
             res

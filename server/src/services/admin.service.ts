@@ -12,6 +12,7 @@ export async function create(data: any) {
   return _.pick(admin, ["_id", "firstName", "lastName", "email", "phone", "emailVerified", "phoneVerified", "isBlocked", "role", "image"]);
 }
 
+
 export async function login(username: string, password: string) {
   const admin = await Admin.findOne({
     $or: [{ email: username }, { phone: username }],
@@ -30,6 +31,7 @@ export async function login(username: string, password: string) {
   const token = await admin.generateAuthToken();
   return { admin: _.pick(admin, ["_id", "firstName", "lastName", "email", "phone", "emailVerified", "phoneVerified", "isBlocked", "role", "image"]), token };
 }
+
 
 export async function logout(token: string) {
   // block token in redis
@@ -58,4 +60,31 @@ export async function unblock(id: string) {
   // TODO remove id from redis block list
   // TODO  send email or sms
   return true;
+}
+
+export async function list(search: string, { page, limit }: { page: number, limit: number }) {
+  const admins = await Admin.find({
+    $or: [{ firstName: { $regex: search, $options: "i" } }, { lastName: { $regex: search, $options: "i" } }, { email: { $regex: search, $options: "i" } }, { phone: { $regex: search, $options: "i" } }],
+  }).skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 }).select("_id firstName lastName email phone emailVerified phoneVerified isBlocked role image");
+  return { admins, pagination: { page, limit, total: await Admin.countDocuments({ $or: [{ firstName: { $regex: search, $options: "i" } }, { lastName: { $regex: search, $options: "i" } }, { email: { $regex: search, $options: "i" } }, { phone: { $regex: search, $options: "i" } }] }) } };
+}
+
+export async function one(id: string) {
+  const admin = await Admin.findById(id).select("_id firstName lastName email phone emailVerified phoneVerified isBlocked role image");
+  return {admin};
+}
+
+export async function update(id: string, data: any) {
+  const admin = await Admin.findById(id);
+  if (!admin) {
+    throw new Error(localDict.fa.errors.notFound);
+  }
+  if (data.email || data.phone) {
+    if (await Admin.isEmailOrPhoneTaken(data.email, data.phone, id)) {
+      throw new Error(localDict.fa.errors.emailOrPhoneExist);
+    }
+  }
+  admin.set(data);
+  await admin.save();
+  return _.pick(admin, ["_id", "firstName", "lastName", "email", "phone", "emailVerified", "phoneVerified", "isBlocked", "role", "image"]);
 }

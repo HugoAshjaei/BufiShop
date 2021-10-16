@@ -20,8 +20,13 @@ export interface ICreate {
 }
 
 export interface IService<T> {
+    pagination?:{
+        page: number;
+        limit: number;
+        total: number;
+    },
     result?: T;
-    error?: string;
+    errors?: string;
 }
 
 // export interface IAuth {
