@@ -1,14 +1,38 @@
 import { Admin } from "../models";
 import localDict from "../helpers/dict";
 import _ from "lodash";
-import { array } from "joi";
+import sendEmail from "../utils/sendEmail/sendEmail";
+import { v4 as uuidv4 } from 'uuid';
 
 export async function create(data: any) {
   if (await Admin.isEmailOrPhoneTaken(data.email, data.phone)) {
     throw new Error(localDict.fa.errors.emailOrPhoneExist);
   }
+
+  // send verification or welcome email
+  if (data.email) {
+    data.uuidCode = uuidv4();
+    data.uuidCodeExpire = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3);
+    if (global.CONFIG.website.isEmailVerificationRequired) {
+      await sendEmail(
+        data.email,
+        "verification",
+        {
+          customerName: data.firstName,
+          customerUUID: data.uuidCode,
+        },
+      );
+    } else {
+      await sendEmail(
+        data.email,
+        "welcome",
+        {
+          customerName: data.firstName,
+        },
+      );
+    }
+  }
   const admin = await new Admin(data).save();
-  // TODO send verification or welcome email
   return _.pick(admin, ["_id", "firstName", "lastName", "email", "phone", "emailVerified", "phoneVerified", "isBlocked", "role", "image"]);
 }
 
@@ -45,8 +69,17 @@ export async function block(id: string) {
   admin.isBlocked = true;
   await admin.save();
   // TODO add id to redis block list
-  // TODO  send email or sms
-
+  // TODO send sms
+  // send email
+  if (admin.email) {
+    await sendEmail(
+      admin.email,
+      "block",
+      {
+        customerName: admin.firstName,
+      },
+    );
+  }
   return { admin };
 }
 
@@ -58,8 +91,17 @@ export async function unblock(id: string) {
   admin.isBlocked = false;
   await admin.save();
   // TODO remove id from redis block list
-  // TODO  send email or sms
-  return { admin };
+  // TODO send sms
+  // send email
+  if (admin.email) {
+    await sendEmail(
+      admin.email,
+      "unblock",
+      {
+        customerName: admin.firstName,
+      },
+    );
+  }  return { admin };
 }
 
 export async function list(search: string, { page, limit }: { page: number, limit: number }) {

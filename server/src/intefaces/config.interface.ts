@@ -3,6 +3,7 @@ import { IImages } from ".";
 
 export interface IConfig {
     _id: string;
+    url: string;
     name: string;
     description?: string;
     email: string;
@@ -15,6 +16,7 @@ export interface IConfig {
     type: 'product' | 'service' | 'file';
     isEmailVerificationRequired: boolean;
     smtp?: {
+        from: string;
         host: string;
         port: number;
         secure: boolean;

@@ -15,6 +15,17 @@ const configSchema = new Schema<IConfig>(
             type: String,
             trim: true
         },
+        url: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            required: true,
+            validate(value: string) {
+                if (!validator.isURL(value)) {
+                    throw new Error(localDict.fa.errors.urlValidationFailed);
+                }
+            }
+        },
         email: {
             type: String,
             required: true,
@@ -112,6 +123,10 @@ const configSchema = new Schema<IConfig>(
             default: false
         },
         smtp: {
+            from: {
+                type: String,
+                trim: true
+            },
             host: {
                 type: String,
                 trim: true

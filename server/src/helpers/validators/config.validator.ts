@@ -23,6 +23,7 @@ const configSchema = Joi.object().keys({
     type: Joi.string().optional(),
     isEmailVerificationRequired: Joi.boolean().required(),
     smtp: Joi.object().optional().keys({
+        from: Joi.string().required(),
         host: Joi.string().required(),
         port: Joi.number().required(),
         secure: Joi.boolean().required(),
