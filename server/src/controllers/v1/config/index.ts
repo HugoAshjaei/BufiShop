@@ -60,9 +60,32 @@ const get = async (req: RequestCustom, res: Response, next: NextFunction) => {
     }
 }
 
+
+const updateLogo = async (req: RequestCustom, res: Response, next: NextFunction) => {
+    try {
+        req.body.logo = req.body.image;
+        const config = await services.config.updateLogo(req.body);
+        return sendResponse({ res, status: 200, response: { result: { config } }, token: req.token });
+    } catch (err) {
+        next(err)
+    }
+}
+
+const updateFavicon = async (req: RequestCustom, res: Response, next: NextFunction) => {
+    try {
+        const config = await services.config.updateFavicon(req.body);
+        return sendResponse({ res, status: 200, response: { result: { config } }, token: req.token });
+    } catch (err) {
+        next(err)
+    }
+}
+
+
 export default {
     gettingStarted,
     createSuperAdmin,
     update,
-    get
+    get,
+    updateLogo,
+    updateFavicon
 };

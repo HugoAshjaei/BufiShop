@@ -9,6 +9,7 @@ package-lock.json
 jwtRS256.key
 jwtRS256.key.pub
 logs/
+uploads/panel
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

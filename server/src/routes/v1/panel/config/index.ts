@@ -5,6 +5,8 @@ import gettingStarted from '../../../../middlewares/gettingStarted';
 import { validateConfig, validateAdmin } from '../../../../helpers/validators';
 import authMiddleware from '../../../../middlewares/auth';
 import upload from '../../../../middlewares/multer';
+import resize from '../../../../middlewares/jimp';
+
 
 export default () => {
     const app = Router();
@@ -40,12 +42,22 @@ export default () => {
     );
 
     app.put('/logo',
-    gettingStarted.isNotFirstTime,
-    authMiddleware.verify,
-    authMiddleware.isSuperAdmin,
-    upload.single('image'),
-    config.update
-);
+        gettingStarted.isNotFirstTime,
+        authMiddleware.verify,
+        authMiddleware.isSuperAdmin,
+        upload.single('image'),
+        resize.one,
+        config.updateLogo
+    );
+
+    app.put('/favicon',
+        gettingStarted.isNotFirstTime,
+        authMiddleware.verify,
+        authMiddleware.isSuperAdmin,
+        upload.single('image'),
+        resize.favicon,
+        config.updateFavicon
+    );
 
 
     // Adding celebrate error handling

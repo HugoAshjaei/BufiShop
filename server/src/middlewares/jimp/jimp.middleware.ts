@@ -21,13 +21,13 @@ export async function one(req: RequestCustom, res: Response, next: NextFunction)
         }
         const file = req.file;
         const format = file.originalname.split('.')[file.originalname.split('.').length - 1];
-        if (imageFormats.includes(format)) {
-            req.body.images = {
-                original: file.filename,
-                thumbnail: await resize(file.filename, config.imagesSize.thumbnail.width, config.imagesSize.thumbnail.height),
-                small: await resize(file.filename, config.imagesSize.small.width, config.imagesSize.small.height),
-                medium: await resize(file.filename, config.imagesSize.medium.width, config.imagesSize.medium.height),
-                large: await resize(file.filename, config.imagesSize.large.width, config.imagesSize.large.height)
+        if (imageFormats.includes(format.toLowerCase())) {
+            req.body.image = {
+                original: file.path,
+                thumbnail: await resize(file.path, config.imagesSize.thumbnail.width, config.imagesSize.thumbnail.height),
+                small: await resize(file.path, config.imagesSize.small.width, config.imagesSize.small.height),
+                medium: await resize(file.path, config.imagesSize.medium.width, config.imagesSize.medium.height),
+                large: await resize(file.path, config.imagesSize.large.width, config.imagesSize.large.height)
             }
             await next();
         } else {
@@ -46,16 +46,35 @@ export async function multiple(req: RequestCustom, res: Response, next: NextFunc
         if (!req.files.image) {
             throw new Error(localDict.fa.errors.resizeProblem);
         }
+        const files = req.files.image;
+        req.body.images = [];
+        files.forEach(async (file: any) => {
+            const format = file.originalname.split('.')[file.originalname.split('.').length - 1];
+            if (imageFormats.includes(format.toLowerCase())) {
+                req.body.images.push({
+                    original: file.path,
+                    thumbnail: await resize(file.path, config.imagesSize.thumbnail.width, config.imagesSize.thumbnail.height),
+                    small: await resize(file.path, config.imagesSize.small.width, config.imagesSize.small.height),
+                    medium: await resize(file.path, config.imagesSize.medium.width, config.imagesSize.medium.height),
+                    large: await resize(file.path, config.imagesSize.large.width, config.imagesSize.large.height)
+                });
+            }
+        }
+        );
+    } catch (error) {
+        throw new Error(localDict.fa.errors.resizeProblem);
+    }
+}
+
+export async function favicon(req: RequestCustom, res: Response, next: NextFunction) {
+    try {
+        if (!req.file) {
+            throw new Error(localDict.fa.errors.resizeProblem);
+        }
         const file = req.file;
         const format = file.originalname.split('.')[file.originalname.split('.').length - 1];
-        if (imageFormats.includes(format)) {
-            req.body.images = {
-                original: file.filename,
-                thumbnail: await resize(file.filename, config.imagesSize.thumbnail.width, config.imagesSize.thumbnail.height),
-                small: await resize(file.filename, config.imagesSize.small.width, config.imagesSize.small.height),
-                medium: await resize(file.filename, config.imagesSize.medium.width, config.imagesSize.medium.height),
-                large: await resize(file.filename, config.imagesSize.large.width, config.imagesSize.large.height)
-            }
+        if (imageFormats.includes(format.toLowerCase())) {
+            req.body.favicon = await resize(file.path, 64, 64);
             await next();
         } else {
             await next();

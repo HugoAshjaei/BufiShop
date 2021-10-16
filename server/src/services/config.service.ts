@@ -27,3 +27,19 @@ export async function get() {
   const config = global.CONFIG.website;
   return config;
 }
+
+export async function updateLogo(data: any) {
+  const config = await Config.findOneAndUpdate({}, { logo: data.logo }, { new: true }).sort({updatedAt: -1});
+  if (!config) {
+    throw new Error(localDict.fa.errors.configNotFound);
+  }
+  return config;
+}
+
+export async function updateFavicon(data: any) {
+  const config = await Config.findOneAndUpdate({}, { favicon: data.favicon }, { new: true }).sort({updatedAt: -1});
+  if (!config) {
+    throw new Error(localDict.fa.errors.configNotFound);
+  }
+  return config;
+}

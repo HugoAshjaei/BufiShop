@@ -4,4 +4,5 @@ export interface RequestCustom extends Request
 {
     token?: string;
     user?: any;
+    files?: any;
 }
