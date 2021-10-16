@@ -25,6 +25,18 @@ export default () => {
         admin.updateById
     );
 
+    app.put('/:id/block',
+        admin.blockById
+    );
+
+    app.put('/:id/unblock',
+        admin.unblockById
+    );
+
+    app.delete('/',
+        admin.deleteByIds
+    );
+
     // Adding celebrate error handling
     app.use(errors());
 

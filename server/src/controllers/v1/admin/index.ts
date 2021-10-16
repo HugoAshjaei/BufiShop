@@ -44,10 +44,39 @@ const updateById = async (req: RequestCustom, res: Response, next: NextFunction)
     }
 }
 
+const blockById = async (req: RequestCustom, res: Response, next: NextFunction) => {
+    try {
+        const data = await services.admin.block(req.params.id);
+        return sendResponse({ res, status: 200, response: { result: data } });
+    } catch (err) {
+        next(err)
+    }
+}
+
+const unblockById = async (req: RequestCustom, res: Response, next: NextFunction) => {
+    try {
+        const data = await services.admin.unblock(req.params.id);
+        return sendResponse({ res, status: 200, response: { result: data } });
+    } catch (err) {
+        next(err)
+    }
+}
+
+const deleteByIds = async (req: RequestCustom, res: Response, next: NextFunction) => {
+    try {
+        await services.admin.remove(req.body.ids);
+        return sendResponse({ res, status: 200, response: { result: {} } });
+    } catch (err) {
+        next(err)
+    }
+}
 
 export default {
     list,
     getById,
     create,
-    updateById
+    updateById,
+    blockById,
+    unblockById,
+    deleteByIds
 };
